@@ -129,6 +129,18 @@ class Project(models.Model):
     def __str__(self):
         return f"{self.title} ({self.year})"
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True, verbose_name="Nombre")
+    slug = models.SlugField(max_length=50, unique=True, blank=True)
+
+    class Meta:
+        verbose_name = "Etiqueta"
+        verbose_name_plural = "Etiquetas"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
 class BlogPost(models.Model):
     title = models.CharField(max_length=200, verbose_name="Título del Artículo")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
@@ -151,6 +163,7 @@ class BlogPost(models.Model):
         blank=True, 
         null=True
     )
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name="Etiquetas")
     is_published = models.BooleanField(default=False, verbose_name="Publicado")
     
     class Meta:

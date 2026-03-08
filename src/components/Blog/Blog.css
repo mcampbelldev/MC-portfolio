@@ -17,11 +17,143 @@
     letter-spacing: -0.03em;
 }
 
+.blog-archive-link {
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.blog-archive-link:hover {
+    color: var(--color-accent);
+}
+
 .section-subtitle {
     font-weight: 200;
     color: #666;
     font-size: 1.2rem;
     margin-top: 0.5rem;
+}
+
+/* Barra de Herramientas Compacta (Filtros + Búsqueda) */
+.blog-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 5rem;
+}
+
+/* Filtros de Blog */
+.blog-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.8rem;
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 0.5rem;
+}
+
+.blog-filter-btn {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    /* Evitar que los tags se aplasten */
+}
+
+.blog-filter-btn:hover {
+    border-color: var(--color-text);
+}
+
+.blog-filter-btn.active {
+    background: var(--color-accent, #e5533c);
+    color: var(--color-bg, #fff);
+    border-color: var(--color-accent, #e5533c);
+}
+
+/* Buscador de Blog */
+.blog-search-form {
+    display: flex;
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+    position: relative;
+    border-bottom: 2px solid var(--color-border);
+    transition: border-color 0.3s ease;
+}
+
+.blog-search-form:focus-within {
+    border-color: var(--color-text);
+}
+
+.blog-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 1rem 0;
+    color: var(--color-text);
+    font-size: 1.1rem;
+    font-family: inherit;
+    font-weight: 300;
+}
+
+.blog-search-input:focus {
+    outline: none;
+}
+
+.blog-search-input::placeholder {
+    color: #999;
+}
+
+.blog-search-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    padding: 0 1rem;
+}
+
+.blog-search-btn:hover {
+    color: var(--color-accent);
+}
+
+.blog-search-clear {
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.blog-search-clear:hover {
+    color: var(--color-accent);
 }
 
 /* Items de Lista Editorial */
@@ -99,6 +231,39 @@
     color: var(--color-accent);
     text-align: left;
     margin-top: 1rem;
+}
+
+/* Zona Inferior y Botón Cargar Más */
+.blog-footer-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    margin-top: 5rem;
+}
+
+.load-more-container {
+    display: flex;
+    justify-content: center;
+}
+
+.load-more-btn {
+    background: transparent;
+    border: 1px solid var(--color-text);
+    color: var(--color-text);
+    padding: 1rem 3rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.load-more-btn:hover {
+    background: var(--color-text);
+    color: var(--color-bg, #fff);
 }
 
 /* Miniatura en Lista */
@@ -232,6 +397,17 @@
 
 /* Media Queries Moviles - Adaptar Grid */
 @media (max-width: 850px) {
+    .blog-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .blog-search-form {
+        max-width: 100%;
+        margin-bottom: 2rem;
+    }
+
     .blog-list-item {
         grid-template-columns: 1fr;
         gap: 1.5rem;

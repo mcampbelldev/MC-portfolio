@@ -4,6 +4,7 @@ import './App.css'
 import MasonryGallery from './components/Gallery/MasonryGallery'
 import About from './components/About/About'
 import Blog from './components/Blog/Blog'
+import Archive from './components/Blog/Archive/Archive'
 import Contact from './components/Contact/Contact'
 import Projects from './components/Projects/Projects'
 import Footer from './components/Footer/Footer'
@@ -102,6 +103,7 @@ function App() {
           <Route path="/projects/:slug" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/archivo" element={<Archive />} />
           <Route path="/blog/:slug" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           {/* Fallback route */}

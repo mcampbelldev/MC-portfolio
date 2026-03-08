@@ -131,6 +131,13 @@ Este diseño asegura el nivel de "Editorial de Museo": estable, estructurado y s
 *   **Separation of Concerns:** Un portafolio de arte requiere inmaculada limpieza. Las fotografías que se suben internamente dentro de los bloques del Blog (ej. capturas de pantalla, fotos de "detrás de cámara" con el móvil) se suben y mapean mediante el flujo interno de `Editor.js`.
 *   Estas imágenes habitan en su propio ecosistema de carga (usualmente `/media/uploads/` manejado por el plugin) y **nunca se inyectan ni ensucian** los modelos de arte core de Django (`models.Photo`, `models.Project`), asegurando que las "colecciones de Arte" del usuario final nunca se mezclen con el contenido de bitácora diaria.
 
+## 16. Sistema de Archivo Histórico y Etiquetas (Taxonomía del Blog)
+**Decisión:** Implementar un modelo de "Tags" (ManyToMany) en el Backend y una carga iterativa en el Frontend (`Archive.jsx`).
+**Fecha:** 8 de marzo de 2026.
+**Justificación:**
+*   **Flexibilidad en Backend:** Al vincular Etiquetas y Artículos mediante una relación ManyToMany en Django, le permitimos a Marcelo aplicar un mismo tema lógico (ej: "Blanco y Negro", "Exhibiciones") a docenas de artículos distintos sin tener que multiplicar o repetir registros de bases de datos de forma innecesaria.
+*   **Lógica en Cliente (Frontend):** Se decidió que la "Agrupación Histórica por Año" la realice React (con el método `reduce` y `fetch` encadenado con la llave "next" de la paginación), en vez de pedirle a la API que devuelva todo precategorizado. ¿El motivo? Esto mantiene a la API de Django "tonta y rápida", dejándola libre para servir el JSON plano velozmente, y transfiere el peso menor de categorizar y ordenar los arrays a la computadora/móvil del visitante (que para este tipo de operaciones es prácticamente instantánea).
+
 ---
 
 ***Status al momento de actualización:** Frontend y Backend (Blog) completados y conectados. Todo preparado para enrutarse al servidor (Backend en Django) programado por el equipo de datos.*

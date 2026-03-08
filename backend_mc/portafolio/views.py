@@ -1,7 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Category, Photo, Project, BlogPost
-from .serializers import CategorySerializer, PhotoSerializer, ProjectSerializer, BlogPostSerializer
+from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q, Count
+from .models import Category, Photo, Project, BlogPost, Tag
+from .serializers import CategorySerializer, PhotoSerializer, ProjectSerializer, BlogPostSerializer, TagSerializer
 
 from django.http import JsonResponse
 from django.views import View
@@ -38,12 +40,46 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all().order_by('order')
     serializer_class = ProjectSerializer
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows tags to be viewed.
+    """
+    serializer_class = TagSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        # Annotate each tag with its associated number of published blog posts
+        # Filter out empty tags and order by post count descending
+        return Tag.objects.annotate(
+            post_count=Count('posts', filter=Q(posts__is_published=True))
+        ).filter(post_count__gt=0).order_by('-post_count', 'name')
+
+class BlogPagination(PageNumberPagination):
+    page_size = 6
+
 class BlogPostViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API para consumir el blog
     """
-    queryset = BlogPost.objects.filter(is_published=True).order_by('-published_date')
     serializer_class = BlogPostSerializer
+    pagination_class = BlogPagination
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        queryset = BlogPost.objects.filter(is_published=True).order_by('-published_date')
+        
+        tag_slug = self.request.query_params.get('tag', None)
+        if tag_slug is not None:
+            queryset = queryset.filter(tags__slug=tag_slug)
+
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) | 
+                Q(excerpt__icontains=search_query)
+            )
+
+        return queryset
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CustomImageUploadView(View):

@@ -1,33 +1,126 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import './Blog.css';
-import { getBlogPosts } from '../../services/portfolioService';
+import { getBlogPosts, getTags, getBlogPost } from '../../services/portfolioService';
 import ArticleRenderer from './ArticleRenderer';
 
 const Blog = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTagSlug = searchParams.get('tag');
+    const urlSearchQuery = searchParams.get('search') || '';
 
     // Estado para las entradas de blog
     const [posts, setPosts] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [searchInput, setSearchInput] = useState(urlSearchQuery);
+    const [nextUrl, setNextUrl] = useState(null);
+    const [activePost, setActivePost] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isTagsExpanded, setIsTagsExpanded] = useState(false);
+
+    // Auto-desplegar tags si el tag activo en URL no está en el top 5
+    useEffect(() => {
+        if (tags.length > 5 && activeTagSlug && !isTagsExpanded) {
+            const index = tags.findIndex(t => t.slug === activeTagSlug);
+            if (index >= 4) { // Top 4 porque el slice luego mostrará 4 + botón (o similar), dejemos top 5 (índices 0-4)
+                setIsTagsExpanded(true);
+            }
+        }
+    }, [tags, activeTagSlug]);
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchTags = async () => {
             try {
-                const data = await getBlogPosts();
-                setPosts(data);
+                const data = await getTags();
+                setTags(data);
+            } catch (error) {
+                console.error("Error cargando tags:", error);
+            }
+        };
+        fetchTags();
+    }, []);
+
+    useEffect(() => {
+        if (slug) return; // Si estamos viendo un apunte, no recargamos la grilla
+
+        const fetchPosts = async () => {
+            setIsLoading(true);
+            try {
+                const data = await getBlogPosts(activeTagSlug, urlSearchQuery);
+                setPosts(data.results || []);
+                setNextUrl(data.next || null);
             } catch (error) {
                 console.error("Error cargando blog posts:", error);
+                setPosts([]);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchPosts();
-    }, []);
+    }, [activeTagSlug, urlSearchQuery, slug]);
 
-    const activePost = slug ? posts.find(p => p.slug === slug) : null;
+    useEffect(() => {
+        if (!slug) {
+            setActivePost(null);
+            return;
+        }
+
+        const found = posts.find(p => p.slug === slug);
+        if (found) {
+            setActivePost(found);
+            return;
+        }
+
+        const fetchSinglePost = async () => {
+            setIsLoading(true);
+            try {
+                const data = await getBlogPost(slug);
+                setActivePost(data && !data.detail ? data : null);
+            } catch (error) {
+                setActivePost(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchSinglePost();
+    }, [slug, posts]);
+
+    const handleLoadMore = async () => {
+        if (!nextUrl) return;
+        try {
+            const data = await getBlogPosts(null, nextUrl);
+            setPosts(prev => [...prev, ...(data.results || [])]);
+            setNextUrl(data.next || null);
+        } catch (error) {
+            console.error("Error al cargar más entradas:", error);
+        }
+    };
+
+    const handleTagClick = (tagSlug) => {
+        if (activeTagSlug === tagSlug) {
+            searchParams.delete('tag');
+        } else {
+            searchParams.set('tag', tagSlug);
+        }
+        searchParams.delete('search'); // Clear search when clicking a tag to avoid confusion
+        setSearchInput('');
+        setSearchParams(searchParams);
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (searchInput.trim()) {
+            searchParams.set('search', searchInput.trim());
+            searchParams.delete('tag'); // Clear tag filter when searching
+        } else {
+            searchParams.delete('search');
+        }
+        setSearchParams(searchParams);
+    };
 
     // Si estamos en la url de un apunte concreto, pero todavía se está cargando el array de posts:
     if (slug && isLoading) {
@@ -61,6 +154,76 @@ const Blog = () => {
                     <h2 className="section-title">Diario Visual</h2>
                     <p className="section-subtitle">Anotaciones sobre la luz y el concreto.</p>
                 </header>
+
+                {/* Barra de Herramientas Compacta (Filtros + Buscador) */}
+                <div className="blog-toolbar">
+                    {/* Filtros de Etiquetas */}
+                    {tags.length > 0 && (
+                        <div className="blog-filters">
+                            <button
+                                className={`blog-filter-btn ${!activeTagSlug ? 'active' : ''}`}
+                                onClick={() => {
+                                    searchParams.delete('tag');
+                                    setSearchParams(searchParams);
+                                }}
+                            >
+                                Todos
+                            </button>
+                            {(isTagsExpanded ? tags : tags.slice(0, 5)).map(tag => (
+                                <button
+                                    key={tag.id}
+                                    className={`blog-filter-btn ${activeTagSlug === tag.slug ? 'active' : ''}`}
+                                    onClick={() => handleTagClick(tag.slug)}
+                                >
+                                    {tag.name}
+                                </button>
+                            ))}
+                            {!isTagsExpanded && tags.length > 5 && (
+                                <button
+                                    className="blog-filter-btn blog-filter-more"
+                                    onClick={() => setIsTagsExpanded(true)}
+                                >
+                                    + {tags.length - 5}
+                                </button>
+                            )}
+                            {isTagsExpanded && tags.length > 5 && (
+                                <button
+                                    className="blog-filter-btn blog-filter-less"
+                                    style={{ border: 'none', color: '#999', padding: '0.5rem' }}
+                                    onClick={() => setIsTagsExpanded(false)}
+                                >
+                                    - Ocultar
+                                </button>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Formulario de Búsqueda */}
+                    <form className="blog-search-form" onSubmit={handleSearchSubmit}>
+                        <input
+                            type="text"
+                            className="blog-search-input"
+                            placeholder="Buscar apuntes, recuerdos..."
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                        <button type="submit" className="blog-search-btn">Buscar</button>
+                        {urlSearchQuery && (
+                            <button
+                                type="button"
+                                className="blog-search-clear"
+                                onClick={() => {
+                                    setSearchInput('');
+                                    searchParams.delete('search');
+                                    setSearchParams(searchParams);
+                                }}
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </form>
+                </div>
+
 
                 {isLoading ? (
                     <div className="section-subtitle" style={{ textAlign: 'center', marginTop: '2rem' }}>Cargando bitácora...</div>
@@ -100,6 +263,25 @@ const Blog = () => {
                         })}
                     </div>
                 )}
+
+
+                {/* Zona de Pie (Cargar más y Archivo Histórico) */}
+                <div className="blog-footer-actions">
+                    {nextUrl && (
+                        <div className="load-more-container">
+                            <button className="load-more-btn" onClick={handleLoadMore}>Cargar más apuntes ↓</button>
+                        </div>
+                    )}
+
+                    <div className="archive-link-container">
+                        <button
+                            className="blog-archive-link"
+                            onClick={() => navigate('/blog/archivo')}
+                        >
+                            [ Ver índice completo en el Archivo Histórico ]
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }

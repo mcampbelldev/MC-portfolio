@@ -150,3 +150,34 @@ Este documento lleva el registro diario del trabajo realizado en el proyecto, do
 - **Jazzmin:** Extensión de terceros para Django que sustituye el tema estándar del panel de control por uno altamente parametrizable soportado en Bootstrap 4/5 y plantillas tipo panel (AdminLTE).
 - **Template Overriding:** Práctica arquitectónica en Django donde se toma posesión de una plantilla original de una aplicación externa colocando un archivo del mismo nombre en nuestras capetas locales (ej: `templates/admin/base.html`), dándole prioridad automática a la nuestra.
 - **Naranja Corporativo:** Color clave hexadecimal de M.C Fotografía (`#ee7c2b`) que actúa como hilo conductor visual.
+
+
+---
+
+## LOG OPERATIVO
+- **Proyecto / Tema:** Portafolio de Fotografía (Blog: Sistema de Archivo Histórico y Etiquetas).
+- **Fecha:** 7 de marzo de 2026
+- **Probé / Trabajé en:**
+  - Creación del modelo Tag (Etiquetas) en base de datos conectado al modelo BlogPost mediante una relación ManyToMany en Django.
+  - Configuración del panel de administración, serializadores (serializers.py) y endpoints (iews.py y urls.py) para poder exponer las etiquetas en la API.
+  - Creación del nuevo componente frontend Archive.jsx (y su respectiva hoja de estilos) destinado a funcionar como índice histórico del blog.
+  - Extensión de lógica en consumos frontend (portfolioService.js y estados de React) para iterar solicitudes a la API temporalmente eludiendo la paginación hasta agrupar todos los registros.
+  - Implementación de la agrupación automática de artículos según el año de publicación usando la función 
+educe sobre los datos de la base de datos de Django para el listado final.
+  - Integración o enrutamiento del nuevo componente de Archivo en la renderización principal de la app (App.jsx y Blog.jsx).
+- **Resultado:** El blog ganó un sistema de taxonomía en backend para etiquetar posts, e incorporó el componente Archivo Histórico para visualizar de forma rápida publicaciones pasadas ordenadas por año.
+- **Aprendí:** La técnica para recolectar datos paginados del cliente armando un bucle en el hook useEffect al inicio de carga, así como agrupar y ordenar propiedades de objetos cronológicamente en el frontend.
+- **Siguiente paso (1):** Implementar y presentar visualmente los resultados y métricas del sistema de etiquetas ("Tags") dentro de la interfaz final de consumo público, o avanzar al despliegue.
+
+## LÍNEA DE LA CONVERSACIÓN (temas en orden)
+1) **Definición Estructura Etiquetas:** Se identificó la necesidad de categorizar los artículos del diario. Se crearon bases de datos de Tag integradas con BlogPost.
+2) **Lógica de APIs Backend:** Habilitación de endpoints y adaptadores para la lectura de los "tags" mediante los llamados en React.
+3) **Creación del Componente Archivo Histórico:** Diseño de una subpágina separada Archive para poder listar la historia completa de publicaciones sin sobrecargar la lista principal del blog.
+4) **Gestión de Paginación en Consumo Frontend:** Solución de lógica de frontend para hacer fetching concurrente de las colecciones limitadas iterando la clave "next".
+
+**Cierre:** Ecosistema de blog fortificado. Preparación estructural finalizada para categorizar y archivar masivamente.
+
+## GLOSARIO OPERATIVO
+- **ManyToMany (Relación):** Modalidad base de datos utilizada hoy, permitiendo que un Post englobe múltiples Tags y un Tag pertenezca a múltiples Posts, sin replicar registros.
+- **Reduce (Agrupación Array JavaScript):** Patrón funcional usado para transformar el listado de todos los artículos en un diccionario categorizado puntualmente por años.
+- **Pagination Loop (Bucle):** Estructura que diseñamos para "traer todo" iterando las peticiones a la API mientras el JSON contenga una respuesta en el atributo "next".

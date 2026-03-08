@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Photo, Project, BlogPost
+from .models import Category, Photo, Project, BlogPost, Tag
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,7 +22,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ['id', 'title', 'slug', 'year', 'location', 'description', 'cover_image', 'is_featured', 'order', 'created_at', 'photos']
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'slug']
+
 class BlogPostSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
+
     class Meta:
         model = BlogPost
-        fields = ['id', 'title', 'slug', 'published_date', 'excerpt', 'cover_image', 'content', 'is_published']
+        fields = ['id', 'title', 'slug', 'published_date', 'excerpt', 'cover_image', 'content', 'is_published', 'tags']

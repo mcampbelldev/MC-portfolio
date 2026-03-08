@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Photo, Project, BlogPost
+from .models import Category, Photo, Project, BlogPost, Tag
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -38,6 +38,13 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_filter = ('is_published', 'published_date')
     search_fields = ('title', 'excerpt')
     prepopulated_fields = {'slug': ('title',)}
+    filter_horizontal = ('tags',)
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name',)
 
     class Media:
         css = {

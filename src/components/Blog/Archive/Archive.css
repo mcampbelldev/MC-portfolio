@@ -1,0 +1,98 @@
+.archive-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.archive-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.archive-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+}
+
+.archive-subtitle {
+    font-weight: 200;
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.archive-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.archive-year-group {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 3rem;
+}
+
+.archive-year-group:last-child {
+    border-bottom: none;
+}
+
+.archive-year {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 2rem;
+    opacity: 0.1;
+    letter-spacing: -0.05em;
+}
+
+.archive-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.archive-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 2rem;
+    align-items: baseline;
+    font-size: 1.1rem;
+}
+
+.archive-date {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    text-align: right;
+}
+
+.archive-post-title {
+    font-weight: 300;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: color 0.3s;
+    line-height: 1.4;
+}
+
+.archive-post-title:hover {
+    color: var(--color-accent);
+}
+
+@media (max-width: 600px) {
+    .archive-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .archive-date {
+        text-align: left;
+    }
+}

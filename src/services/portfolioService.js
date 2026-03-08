@@ -66,13 +66,57 @@ export const getProjects = async () => {
  * Fetch all published blog posts from the backend.
  * @returns {Promise<Array>} List of blog post objects.
  */
-export const getBlogPosts = async () => {
+export const getBlogPosts = async (tagSlug = null, searchQuery = null, url = null) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/blog/`);
+        let fetchUrl = url;
+        if (!fetchUrl) {
+            let baseUrl = `${API_BASE_URL}/blog/`;
+            const params = new URLSearchParams();
+            if (tagSlug) params.append('tag', tagSlug);
+            if (searchQuery) params.append('search', searchQuery);
+
+            if (params.toString()) {
+                fetchUrl = `${baseUrl}?${params.toString()}`;
+            } else {
+                fetchUrl = baseUrl;
+            }
+        }
+        const response = await fetch(fetchUrl);
         if (!response.ok) throw new Error('Network response was not ok');
         return await response.json();
     } catch (error) {
         console.error("Error fetching blog posts:", error);
+        return { results: [], next: null };
+    }
+};
+
+/**
+ * Fetch a single published blog post by its slug.
+ * @param {string} slug 
+ * @returns {Promise<Object|null>} Blog post object or null.
+ */
+export const getBlogPost = async (slug) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/blog/${slug}/`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching blog post ${slug}:`, error);
+        return null;
+    }
+};
+
+/**
+ * Fetch all tags from the backend.
+ * @returns {Promise<Array>} List of tag objects.
+ */
+export const getTags = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/tags/`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching tags:", error);
         return [];
     }
 };

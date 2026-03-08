@@ -55,6 +55,12 @@ Si necesitas mi ayuda en el futuro (o la de cualquier otro agente técnico/desar
 2.  Ve a `http://localhost:8000/admin` (o a la URL de producción cuando esté en vivo).
 3.  Usa el superusuario que creamos. Desde allí, la interfaz es intuitiva y permite Añadir/Editar Fotos y Proyectos con simples botones.
 
+### "Marcelo quiere crear una nueva Categoría (Etiqueta) para el Diario Visual"
+1. Entra al Panel de Control como Administrador.
+2. En el menú de la izquierda, bajo la sección del **Portafolio**, haz clic en "**Tags**" (Etiquetas).
+3. Escribe el nombre de la nueva categoría (Ej. "Entrevistas", "Técnica") y guarda.
+4. Ahora, al redactar un nuevo artículo o editar uno viejo del Diario Visual, esa etiqueta aparecerá automáticamente y podrás asignarla manteniendo presionada la tecla *Ctrl* (o *Cmd* en Mac) para elegir una o varias al mismo tiempo.
+
 ---
 
 ## 5. El Legado para "Cris" (El Equipo Backend)
