@@ -37,9 +37,9 @@ const Contact = () => {
                     <div className="contact-socials">
                         <span className="contact-label">REDES</span>
                         <div className="social-links-wrapper">
-                            <a href="#" target="_blank" rel="noreferrer">Instagram</a>
+                            <a href="#!" aria-label="Visitar canal de Instagram" target="_blank" rel="noreferrer">Instagram</a>
                             <span className="separator">/</span>
-                            <a href="#" target="_blank" rel="noreferrer">VSCO</a>
+                            <a href="#!" aria-label="Visitar canal de VSCO" target="_blank" rel="noreferrer">VSCO</a>
                         </div>
                     </div>
                 </div>

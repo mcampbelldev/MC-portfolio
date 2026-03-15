@@ -1,19 +1,25 @@
 :root {
   /* Design System Colors - Marcelo Campbell */
-  --color-bg: #f8f7f6; /* Warm off-white */
-  --color-text: #0f0f11; /* Near black - stone-900 */
-  --color-accent: #ee7c2b; /* Orange for micro-UI */
-  --color-border: rgba(0, 0, 0, 0.08); /* Minimal concrete border */
-  
+  --color-bg: #f8f7f6;
+  /* Warm off-white */
+  --color-text: #0f0f11;
+  /* Near black - stone-900 */
+  --color-accent: #ee7c2b;
+  /* Orange for micro-UI */
+  --color-border: rgba(0, 0, 0, 0.08);
+  /* Minimal concrete border */
+
   /* Photography Presentation */
-  --photo-bg: #fefdfb; /* True "paper" white for photo mats */
+  --photo-bg: #fefdfb;
+  /* True "paper" white for photo mats */
   --photo-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  
+
   /* Typography */
   --font-family: 'Manrope', sans-serif;
-  
+
   /* Layout Spacing */
-  --grid-gap: 12px; /* Tight Pinterest masonry */
+  --grid-gap: 12px;
+  /* Tight Pinterest masonry */
 }
 
 /* Reset and Global Styles */
@@ -32,7 +38,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 0.5em;
@@ -51,6 +62,23 @@ button {
   cursor: pointer;
 }
 
+/* ----------------------------------
+   A11y (Accessibility) Global Focus 
+   ----------------------------------
+   Provides a clear, branded outline ONLY when navigating via keyboard (Tab). 
+   Removes default outline for mouse users to maintain minimalism. */
+a:focus,
+button:focus {
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 img {
   max-width: 100%;
   display: block;
@@ -59,7 +87,8 @@ img {
 /* Utility classes based on brief */
 .matte-photo {
   background-color: var(--photo-bg);
-  padding: 6px; /* 3-8px matte border */
+  padding: 6px;
+  /* 3-8px matte border */
   box-shadow: var(--photo-shadow);
   border: 1px solid var(--color-border);
 }

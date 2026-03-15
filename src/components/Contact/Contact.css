@@ -4,6 +4,9 @@
     justify-content: center;
     /* El requerimiento dicta: "no scrolling needed". Ocupamos el alto justo sumando el nav */
     min-height: calc(100vh - 100px);
+    /* Fallback */
+    min-height: calc(100dvh - 100px);
+    /* Dynamic Viewport contra Safari Jitter */
     padding: 2rem;
     background-color: var(--color-bg);
     animation: fadeIn 0.5s ease-out;

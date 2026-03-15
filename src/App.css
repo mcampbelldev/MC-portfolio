@@ -145,8 +145,8 @@
 
 /* Contenedor que da el margen de "scroll" antes de ser empujado */
 .hero-scroll-container {
-  height: 120vh;
-  /* 100vh para hero, 20vh de tiempo de enganche (empuje) */
+  height: 120svh;
+  /* 100svh para hero, 20svh de tiempo de enganche (empuje). 'svh' previene saltos en iOS Safari al scrollear */
   position: relative;
   z-index: 10;
   width: 100%;
@@ -154,7 +154,7 @@
 
 /* Contenedor del Hero - Pegajoso y de Pantalla Completa */
 .hero-wrapper {
-  height: 100vh;
+  height: 100svh;
   width: 100%;
   position: sticky;
   /* Esto crea la magia de que quede fijo mientras se scrollea */

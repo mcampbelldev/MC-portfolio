@@ -34,11 +34,11 @@ const About = () => {
                     </div>
 
                     <div className="about-socials">
-                        <a href="#" target="_blank" rel="noreferrer">Instagram</a>
+                        <a href="#!" aria-label="Ver fotografías en Instagram" target="_blank" rel="noreferrer">Instagram</a>
                         <span className="separator">/</span>
-                        <a href="#" target="_blank" rel="noreferrer">VSCO</a>
+                        <a href="#!" aria-label="Ver ensayos en VSCO" target="_blank" rel="noreferrer">VSCO</a>
                         <span className="separator">/</span>
-                        <a href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+                        <a href="#!" aria-label="Visitar perfil profesional en LinkedIn" target="_blank" rel="noreferrer">LinkedIn</a>
                     </div>
                 </div>
 

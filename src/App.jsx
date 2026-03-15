@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import './App.css'
-import MasonryGallery from './components/Gallery/MasonryGallery'
-import About from './components/About/About'
-import Blog from './components/Blog/Blog'
-import Archive from './components/Blog/Archive/Archive'
-import Contact from './components/Contact/Contact'
-import Projects from './components/Projects/Projects'
+
+const MasonryGallery = lazy(() => import('./components/Gallery/MasonryGallery'))
+const About = lazy(() => import('./components/About/About'))
+const Blog = lazy(() => import('./components/Blog/Blog'))
+const Archive = lazy(() => import('./components/Blog/Archive/Archive'))
+const Contact = lazy(() => import('./components/Contact/Contact'))
+const Projects = lazy(() => import('./components/Projects/Projects'))
+
 import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/Navigation/ScrollToTop'
 
@@ -97,18 +99,20 @@ function App() {
 
       {/* Navegador Interno - Renderización vía Rutas Reales */}
       <main className={currentPage === 'home' ? "main-content" : ""}>
-        <Routes>
-          <Route path="/" element={<MasonryGallery />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:slug" element={<Projects />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/archivo" element={<Archive />} />
-          <Route path="/blog/:slug" element={<Blog />} />
-          <Route path="/contact" element={<Contact />} />
-          {/* Fallback route */}
-          <Route path="*" element={<MasonryGallery />} />
-        </Routes>
+        <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Cargando vista...</div>}>
+          <Routes>
+            <Route path="/" element={<MasonryGallery />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:slug" element={<Projects />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/archivo" element={<Archive />} />
+            <Route path="/blog/:slug" element={<Blog />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* Fallback route */}
+            <Route path="*" element={<MasonryGallery />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <Footer />

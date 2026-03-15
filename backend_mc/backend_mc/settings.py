@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +25,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=v@v4s-gg^^4)jy=jp6u7)=a^smt%ii6x&+j^dldr8y3e3qod3'
+SECRET_KEY = os.getenv('SECRET_KEY', 'unsafe-fallback-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+if os.getenv('RAILWAY_PUBLIC_DOMAIN'):
+    ALLOWED_HOSTS.append(os.getenv('RAILWAY_PUBLIC_DOMAIN'))
+if os.getenv('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
+
+# Tratar los HOSTS nulos si está vacío (evita error si el env viene vacío)
+ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
+if DEBUG and not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['*']
+
+# Configuración global estricta para APIs (DRF)
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 
 # Application definition
@@ -47,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,13 +103,18 @@ WSGI_APPLICATION = 'backend_mc.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mc_fotografia',
-        'USER': 'postgres',
-        'PASSWORD': '12345', # Ensure Cris uses this password or changes it here 
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'NAME': os.getenv('DB_NAME', 'mc_fotografia'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''), 
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '5432')
     }
 }
+
+# Override database settings with DATABASE_URL if provided
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+if db_from_env:
+    DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -126,15 +152,52 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Media files (Images uploaded by admin)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Configuración de Archivos Estáticos (WhiteNoise) para Producción
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Configuración de Almacenamiento S3 (Cloudflare R2)
+if os.getenv('R2_ACCESS_KEY_ID') and os.getenv('R2_SECRET_ACCESS_KEY'):
+    AWS_ACCESS_KEY_ID = os.getenv('R2_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('R2_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('R2_BUCKET_NAME')
+    AWS_S3_ENDPOINT_URL = os.getenv('R2_ENDPOINT_URL')
+    
+    # Custom domain (opcional) para servir via Cloudflare
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('R2_CUSTOM_DOMAIN', AWS_S3_ENDPOINT_URL.replace('https://', ''))
+    
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    # Forzar uso de s3v4 y configuración de región agnóstica para R2
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_REGION_NAME = 'auto'
+    
+    # Reemplazar el backend de archivos subidos al S3
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage"
+    }
+
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173", # Vite default React dev server port
 ]
+
+# Leer orígenes cors desde entorno si existe y agregarlo
+if os.getenv('FRONTEND_URL'):
+    CORS_ALLOWED_ORIGINS.append(os.getenv('FRONTEND_URL'))
 
 # Configuración explícita para forzar la última versión de EditorJS core 
 # y evitar conflictos con los plugins actualizados @latest
@@ -203,6 +266,15 @@ JAZZMIN_SETTINGS = {
     
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
+    
+    # Custom Sidebar Order (Opción A: Replicar estructura de la Web Frontend)
+    "order_with_respect_to": [
+        "portafolio.Photo", 
+        "portafolio.Project", 
+        "portafolio.Category", 
+        "portafolio.BlogPost", 
+        "portafolio.Tag"
+    ],
     
     "hide_apps": [],
     "hide_models": ["auth.Group"],

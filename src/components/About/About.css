@@ -4,13 +4,16 @@
     color: var(--color-bg);
     /* Use the off-white from :root */
     min-height: 100vh;
-    
+    /* Fallback navegadores antiguos */
+    min-height: 100dvh;
+    /* Medida inteligente anti-salto móvil */
+
     /* Pull the container up so the black background sits under the sticky nav immediately */
     margin-top: -120px;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     /* Compensate for the negative margin so content stays centered perfectly */
     padding: calc(8rem + 120px) 2rem 8rem 2rem;
 

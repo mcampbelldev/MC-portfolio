@@ -151,6 +151,27 @@ Este documento lleva el registro diario del trabajo realizado en el proyecto, do
 - **Template Overriding:** Práctica arquitectónica en Django donde se toma posesión de una plantilla original de una aplicación externa colocando un archivo del mismo nombre en nuestras capetas locales (ej: `templates/admin/base.html`), dándole prioridad automática a la nuestra.
 - **Naranja Corporativo:** Color clave hexadecimal de M.C Fotografía (`#ee7c2b`) que actúa como hilo conductor visual.
 
+---
+
+## LOG OPERATIVO
+- **Proyecto / Tema:** Portafolio de Fotografía (Búsqueda y Evaluación de Hosting).
+- **Fecha:** 4 de marzo de 2026
+- **Probé / Trabajé en:**
+  - Investigación y análisis de diferentes proveedores y opciones de alojamiento web (hosting) para el despliegue en producción del proyecto.
+  - Evaluación de requerimientos técnicos de infraestructura basados en la arquitectura dual que poseemos (Frontend en React y Backend robusto en Django con PostgreSQL).
+- **Resultado:** Se generó una claridad sobre las alternativas tecnológicas de hosting más acordes y viables para estabilizar la web de M.C Fotografía en línea de forma segura.
+- **Aprendí:** Los criterios primordiales para seleccionar un alojamiento adecuado considerando la separación de capas (cliente/servidor) y costos asociados para mantener bases de datos relacionales.
+- **Siguiente paso (1):** Continuar mejorando los módulos backend/frontend mientras se define completamente cuál plataforma recibirá el despliegue definitivo.
+
+## LÍNEA DE LA CONVERSACIÓN (temas en orden)
+1) **Infraestructura de Hosting:** Apertura de la investigación sobre qué plataformas soportan mejor despliegues para aplicaciones full-stack de este perfil.
+2) **Comparativa de Proveedores:** Valoración de aspectos técnicos en distintas opciones del mercado (facilidad de uso, integración y soporte a largo plazo).
+
+**Cierre:** Mapa referencial de servicios de alojamiento configurado. Preparación mental completada antes de realizar pagos o migrar archivos reales.
+
+## GLOSARIO OPERATIVO
+- **Hosting (Alojamiento Web):** Servicio que provee el espacio y los servidores conectados a internet necesarios para almacenar y servir públicamente el proyecto, permitiendo que el dominio sea visitable.
+- **Despliegue en Producción:** Fase final de la ingeniería donde los archivos de código fuente local se construyen y suben al alojamiento para que operen globalmente.
 
 ---
 

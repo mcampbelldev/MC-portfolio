@@ -118,6 +118,7 @@ class Project(models.Model):
     cover_image = models.ImageField(upload_to="projects/covers/", blank=True, null=True, verbose_name="Foto de Portada")
     # Este mismo embudo podríamos agregárselo a cover_image en el futuro si Marcelo sube archivos muy grandes para las tapas.
     is_featured = models.BooleanField(default=False, verbose_name="Destacado")
+    is_published = models.BooleanField(default=True, verbose_name="Publicado", help_text="Desmárquelo para ocultar este proyecto de la página web sin eliminarlo.")
     order = models.PositiveIntegerField(default=0, verbose_name="Orden de aparición")
     created_at = models.DateTimeField(auto_now_add=True)
 

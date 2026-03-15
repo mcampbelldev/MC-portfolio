@@ -19,8 +19,9 @@ class PhotoInline(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'year', 'location', 'is_featured', 'order')
-    list_editable = ('is_featured', 'order')
+    list_display = ('title', 'year', 'location', 'is_published', 'is_featured', 'order')
+    list_editable = ('is_published', 'is_featured', 'order')
+    list_filter = ('is_published', 'is_featured')
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'location', 'year')
     inlines = [PhotoInline]

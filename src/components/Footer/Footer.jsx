@@ -42,9 +42,9 @@ const Footer = () => {
                         Viajando a Todas Partes.
                     </p>
                     <div className="footer-socials">
-                        <a href="#" target="_blank" rel="noreferrer">IG</a>
-                        <a href="#" target="_blank" rel="noreferrer">VSCO</a>
-                        <a href="#" target="_blank" rel="noreferrer">IN</a>
+                        <a href="#!" aria-label="Ir al Instagram de Marcelo" target="_blank" rel="noreferrer">IG</a>
+                        <a href="#!" aria-label="Ir al portafolio en VSCO" target="_blank" rel="noreferrer">VSCO</a>
+                        <a href="#!" aria-label="Ver perfil de LinkedIn" target="_blank" rel="noreferrer">IN</a>
                     </div>
                 </div>
 

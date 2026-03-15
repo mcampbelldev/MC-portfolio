@@ -63,3 +63,61 @@ a {
 a:hover {
     color: var(--mc-orange-hover);
 }
+
+/* 4. PERFIL DE ADMINISTRADOR (Icono superior) */
+.user-panel .image .admin-profile-icon {
+    color: var(--mc-orange);
+    font-size: 2.2rem;
+    /* Aumenta el tamaño del ícono */
+    background-color: #fff;
+    /* Opcional para darle más visibilidad en modo claro/oscuro */
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 5. LINEA DE TIEMPO (Recent Actions) */
+.timeline>div>.fa,
+.timeline>div>.fas,
+.timeline>div>.far,
+.timeline>div>.fab {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+    line-height: 32px !important;
+    position: absolute !important;
+    color: #ffffff !important;
+    border-radius: 50% !important;
+    text-align: center !important;
+    left: 14px !important;
+    top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Adaptación de colores de estado (Branding) */
+.timeline>div>.bg-success {
+    background-color: #28a745 !important;
+    /* Agregar = Verde clásico */
+}
+
+.timeline>div>.bg-info {
+    /* Ediciones = Cyan por defecto, pero lo enrutamos al Naranja MC */
+    background-color: var(--mc-orange) !important;
+}
+
+.timeline>div>.bg-danger {
+    background-color: #dc3545 !important;
+    /* Eliminar = Rojo clásico */
+}
+
+.timeline>div>.bg-gray {
+    background-color: #adb5bd !important;
+    /* Fin = Gris neutro */
+}
+
+/* Forzar que la línea gris vertical pase justo por el medio del círculo */
+.timeline::before {
+    left: 30px !important;
+    background-color: #dee2e6 !important;
+}

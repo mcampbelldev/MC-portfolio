@@ -38,8 +38,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     API endpoint para consultar las galerías/proyectos. Trae todas las fotos anidadas automáticamente.
     """
-    queryset = Project.objects.all().order_by('order')
+    queryset = Project.objects.filter(is_published=True).order_by('order')
     serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows tags to be viewed.
