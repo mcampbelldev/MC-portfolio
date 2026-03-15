@@ -18,7 +18,7 @@ jobs:
         uses: cpina/github-action-push-to-another-repository@main
         env:
           # TOKEN DE MARCELO: Requerido para poder escribir en su repositorio
-          API_TOKEN_GITHUB: ${{ secrets.CLIENT_REPO_PAT }}
+          API_TOKEN_GITHUB: ${{ secrets.MARCELO_GITHUB_TOKEN }}
         with:
           source-directory: '.'
           # LA CUENTA ORIGEN (Cruz): Evita que se copie el propio directorio .github (opcional, pero buena práctica si Marcelo no necesita los workflows internos)
