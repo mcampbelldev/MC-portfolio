@@ -29,4 +29,3 @@ jobs:
           user-email: 'bot@github.com'
           target-branch: main
           commit-message: "chore: Auto-sync from agency repository"
-          force-push: 'true'
