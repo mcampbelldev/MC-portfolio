@@ -202,3 +202,31 @@ educe sobre los datos de la base de datos de Django para el listado final.
 - **ManyToMany (Relación):** Modalidad base de datos utilizada hoy, permitiendo que un Post englobe múltiples Tags y un Tag pertenezca a múltiples Posts, sin replicar registros.
 - **Reduce (Agrupación Array JavaScript):** Patrón funcional usado para transformar el listado de todos los artículos en un diccionario categorizado puntualmente por años.
 - **Pagination Loop (Bucle):** Estructura que diseñamos para "traer todo" iterando las peticiones a la API mientras el JSON contenga una respuesta en el atributo "next".
+
+
+---
+
+## LOG OPERATIVO
+- **Proyecto / Tema:** Portafolio de Fotografía (Preparativos de Despliegue Backend, Refinamiento UI y Sincronización CI/CD).
+- **Fecha:** 8 al 17 de marzo de 2026
+- **Probé / Trabajé en:**
+  - **Frontend (8 de marzo):** Refinamientos estéticos generales y ajustes de CSS (index.css, App.css) en varios componentes de la aplicación (Contact, Footer, About). Ejecución exitosa del build de producción (generación de la carpeta dist).
+  - **Backend (15 de marzo):** Preparación estructural del servidor Django para un entorno de despliegue tipo PaaS (Plataforma como Servicio). Creación de los archivos críticos Procfile y 
+untime.txt, actualización de 
+equirements.txt y ajustes de seguridad/despliegue en settings.py. Modificación del .gitignore para limpiezas de repositorios.
+  - **Sincronización (17 de marzo):** Implementación de integración continua (CI) en GitHub Actions (sync_to_client.yml). Se configuró un workflow para empujar (*push*) el código validado desde el repositorio de la agencia hacia el repositorio final del cliente (mcampbelldev/MC-portfolio).
+- **Resultado:** Interfaz pulida, backend empacado y estandarizado para entornos de producción, y hemos concretado "una pequeña gran victoria" al lograr automatizar la sincronización de repositorios sin generar bucles infinitos y manejando correctamente los tokens y permisos de GitHub Actions.
+- **Aprendí:** Cómo orquestar componentes para despliegues (Procfile/runtime.txt para Python), y la configuración del action cpina/github-action-push-to-another-repository controlando directorios fuente y destino para evitar copiado del propio workflow y ciclos de sincronización.
+- **Siguiente paso (1):** Ejecutar finalmente el despliegue del código sincronizado hacia el servicio de hosting para ver el proyecto en vivo y configurar el dominio.
+
+## LÍNEA DE LA CONVERSACIÓN (temas en orden)
+1) **Pulido Visual y Build:** Ajustes menores de estilo en el frontend para asegurar consistencia; prueba de compilación de React/Vite.
+2) **Configuraciones de Producción Backend:** Evolución del servidor local hacia un entorno estándar de despliegue, inyectando variables y archivos de entorno remoto (Procfile).
+3) **Automatización de Repositorios (CI/CD):** Resolución del atasco técnico para mover de forma automática y transparente nuestro código al GitHub personal del cliente (Marcelo) usando *Actions*.
+
+**Cierre:** Barreras técnicas de sincronización superadas. Repositorio del cliente recibiendo nuestro código estable. Rumbo claro al *deploy* final.
+
+## GLOSARIO OPERATIVO
+- **CI/CD (Integración y Despliegue Continuo):** Práctica de desarrollo que en nuestro caso usamos para que cada *push* en nuestra rama envíe el código actualizado a las manos del cliente mediante un *Workflow* automatizado.
+- **Procfile:** Archivo de texto sin extensión que le instruye a la plataforma de hosting (ej. Heroku/Render) qué comando ejecutar para iniciar los procesos web del backend.
+- **Workflow (GitHub Actions):** Archivo YAML (sync_to_client.yml) que dicta una serie de pasos automáticos a ejecutar en los servidores de GitHub ante un evento (como un push).
