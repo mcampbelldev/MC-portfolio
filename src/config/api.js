@@ -1,6 +1,7 @@
 // This file holds the base URL for our backend API.
-// In development, it points to the local Django server.
-// In production, this should be changed to the real domain (e.g., https://api.mcfotografia.com/api)
+// It reads from VITE_API_URL on Vercel or defaults to local Django.
 
-export const API_BASE_URL = 'http://localhost:8000/api';
-export const MEDIA_BASE_URL = 'http://localhost:8000'; // For images
+const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+export const API_BASE_URL = `${backendUrl}/api`;
+export const MEDIA_BASE_URL = backendUrl; // For fallback images not hosted on Cloudflare
